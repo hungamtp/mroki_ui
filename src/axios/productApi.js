@@ -7,8 +7,8 @@ const productApi = {
   },
 
   getProductDetail(id) {
-    const url = "user/product/" + id;
-    return axiosClient.delete(url);
+    const url = `user/product/${id}`;
+    return axiosClient.get(url);
   },
 };
 

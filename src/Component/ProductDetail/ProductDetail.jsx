@@ -29,7 +29,6 @@ const ProductDetail = () => {
   useEffect(() => {
     fetchComments().then((commentData) => {
       setComments(commentData);
-      console.log(commentData);
     });
   }, []);
 

@@ -1,14 +1,20 @@
 import React from "react";
 import Pagination from "@material-ui/lab/Pagination";
 import useStyles from "./styles";
+import { Container } from "@material-ui/core";
 
-const Paginations = ({ page }) => {
+const Paginations = ({ totalPages, setCurrentPage }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Pagination count={5} variant="outlined" color="primary" />
-    </div>
+    <Container maxWidth="lg">
+      <Pagination
+        count={totalPages}
+        variant="outlined"
+        color="primary"
+        onChange={(event, value) => setCurrentPage(value - 1)}
+      />
+    </Container>
   );
 };
 

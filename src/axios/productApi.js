@@ -10,6 +10,10 @@ const productApi = {
     const url = `user/product/${id}`;
     return axiosClient.get(url);
   },
+  getTotalPage() {
+    const url = `user/product/totalPage`;
+    return axiosClient.get(url);
+  },
 };
 
 export default productApi;

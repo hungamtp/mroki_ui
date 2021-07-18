@@ -4,7 +4,7 @@ import { Rating } from "@material-ui/lab";
 import useStyles from "./styles";
 import { Link } from "react-router-dom";
 
-const Product = ({ product, onAddToCart }) => {
+const Product = ({ product }) => {
   const classes = useStyles();
 
   return (

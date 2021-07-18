@@ -11,6 +11,11 @@ const commentApi = {
       "user/comment?productId=" + productId + "&customerId=" + customerId;
     return axiosClient.delete(url, comment);
   },
+
+  getEverageRate(productId) {
+    const url = `user/comment/total/${productId}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default commentApi;

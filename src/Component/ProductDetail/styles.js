@@ -9,6 +9,24 @@ export default makeStyles((theme) => ({
   },
   root: {
     flexGrow: 1,
-    marginTop: 100,
+    maxWidth: "100%",
+    marginTop: 50,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+  media: {
+    height: 0,
+    paddingTop: "56.25%", // 16:9
+  },
+  cardActions: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  cardContent: {
+    display: "flex",
+    justifyContent: "space-between",
   },
 }));

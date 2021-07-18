@@ -16,7 +16,16 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const user = { username, password };
+    login();
+  };
+
+  const login = async () => {
+    const response = await authApi.login({
+      username: username,
+      password: password,
+    });
+    const data = await response.data;
+    console.log(data);
   };
 
   return (

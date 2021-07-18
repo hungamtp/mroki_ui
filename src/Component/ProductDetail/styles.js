@@ -36,21 +36,21 @@ export default makeStyles((theme) => ({
   },
   rateContainer: {
     display: "block",
+    marginTop: 20,
     alignItems: "center",
+    paddingBottom: 10,
   },
   rateDetail: {
     margin: "auto",
-    display: "inline-block",
+    display: "flex",
     alignItems: "center",
+    justifyContent: "space-around",
   },
   size: {
     padding: 0,
-    marginTop: 20,
     display: "flex",
-    justifyContent: "flex-start",
-  },
-  commentContainer: {
-    marginTop: 10,
+    flexWrap: "wrap",
+    justifyContent: "space-around",
   },
   comment: {
     display: "flex",

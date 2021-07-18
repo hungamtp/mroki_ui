@@ -6,8 +6,8 @@ const cartApi = {
     return axiosClient.get(url);
   },
 
-  addToCart(customerId, product) {
-    const url = `user/cart/${customerId}`;
+  addToCart(cartId, product) {
+    const url = `user/cart/${cartId}`;
     return axiosClient.post(url, product);
   },
 

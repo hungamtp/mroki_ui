@@ -4,18 +4,37 @@ import useStyles from "./styles";
 import productApi from "../../axios/productApi";
 import commentApi from "../../axios/commentApi";
 import sizeApi from "../../axios/sizeApi";
+import cartApi from "../../axios/cartApi";
 import boy from "../../assets/boy.png";
-import { Grid, Container, Avatar } from "@material-ui/core";
+import {
+  Grid,
+  Container,
+  Avatar,
+  Button,
+  ButtonGroup,
+} from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
-import { Card, CardMedia, CardContent, Typography } from "@material-ui/core";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  IconButton,
+} from "@material-ui/core";
+import { AddShoppingCart } from "@material-ui/icons";
 
 const ProductDetail = () => {
   let { id } = useParams();
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
   const [sizes, setSizes] = useState([]);
+  const [size, setSize] = useState();
   const [rate, setRate] = useState([]);
   const classes = useStyles();
+
+  const handleAddToCart = () => {
+    cartApi.addToCart(28, { id: id, quantity: 1, size: size });
+  };
 
   const fetchProduct = async () => {
     const productData = await productApi.getProductDetail(id);
@@ -52,8 +71,6 @@ const ProductDetail = () => {
     fetchAverageEate().then((everagrate) => {
       setRate(everagrate);
     });
-  }, []);
-  useEffect(() => {
     fetchComments().then((commentData) => {
       setComments(commentData);
     });
@@ -85,37 +102,53 @@ const ProductDetail = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className={classes.size}>
-              {sizes.map((size) => {
-                return <Card className={classes.root}>{size.size}</Card>;
-              })}
-            </Card>
-            <Card className={classes.root}>
+            <h3>Size</h3>
+            <ButtonGroup size="small" aria-label="small outlined button group">
+              <Card className={classes.size}>
+                {sizes.map((size) => {
+                  return (
+                    <Button
+                      value={size}
+                      onClick={() => {
+                        setSize(size.size);
+                      }}
+                    >
+                      {size.size}
+                    </Button>
+                  );
+                })}
+              </Card>
+              <IconButton aria-label="Add to Cart">
+                <AddShoppingCart onClick={handleAddToCart} />
+              </IconButton>
+            </ButtonGroup>
+
+            <Card className={classes.rateContainer}>
               <div className={classes.rateCard}>
                 <h1>{rate.rate}</h1>
                 <div>
                   <Rating value={rate.rate} readOnly />
-                  <div>{rate.count} comments</div>
+                  <div>{rate.count} Feedbacks</div>
                 </div>
               </div>
 
-              <div>
+              <div className={classes.rateDetail}>
                 <Rating value={1} readOnly />
                 {rate.countRate1}
               </div>
-              <div>
+              <div className={classes.rateDetail}>
                 <Rating value={2} readOnly />
                 <span>{rate.countRate2} </span>
               </div>
-              <div>
+              <div className={classes.rateDetail}>
                 <Rating value={3} readOnly />
                 <span>{rate.countRate3} </span>
               </div>
-              <div>
+              <div className={classes.rateDetail}>
                 <Rating value={4} readOnly />
                 <span>{rate.countRate4} </span>
               </div>
-              <div>
+              <div className={classes.rateDetail}>
                 <Rating value={5} readOnly />
                 <span>{rate.countRate5} </span>
               </div>

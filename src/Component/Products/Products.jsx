@@ -12,7 +12,7 @@ const Products = ({ products, onAddToCart, isLoading }) => {
       <Grid container justify="center" spacing={4}>
         {products.map((product) => {
           return (
-            <Grid item key={product.id} xs={12} sm={3} md={3}>
+            <Grid item key={product.id} xs={12} sm={4} md={4}>
               {isLoading ? (
                 <Skeleton variant="rect" width={210} height={320} />
               ) : (

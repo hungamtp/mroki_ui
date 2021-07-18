@@ -17,7 +17,8 @@ const ProductDetail = () => {
   };
   const fetchComments = async () => {
     const response = await commentApi.getAll(id, 0);
-    const data = await response.data;
+    console.log(response);
+    const data = await response.data.data;
     return data;
   };
 
@@ -32,7 +33,14 @@ const ProductDetail = () => {
     });
   }, []);
 
-  return <div className={classes.root}>{product.name}</div>;
+  return (
+    <div className={classes.root}>
+      {product.name}
+      {comments.map((comment) => {
+        return <div className="comment">{comment.username}</div>;
+      })}
+    </div>
+  );
 };
 
 export default ProductDetail;

@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Typography,
-  IconButton,
-  Box,
-} from "@material-ui/core";
-import { AddShoppingCart } from "@material-ui/icons";
+import { Card, CardMedia, CardContent, Typography } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 import useStyles from "./styles";
 import { Link } from "react-router-dom";
@@ -16,35 +7,25 @@ import { Link } from "react-router-dom";
 const Product = ({ product, onAddToCart }) => {
   const classes = useStyles();
 
-  const handleAddToCart = () => onAddToCart(product, 1);
   return (
-    <Card className={classes.root}>
-      <CardMedia
-        className={classes.media}
-        image={product.thumbnail}
-        title={product.name}
-      />
-      <CardContent>
-        <div className={classes.cardContent}>
-          <Typography variant="h5" gutterBottom>
-            <Link
-              style={{ textDecoration: "none" }}
-              to={`/product/${product.id}`}
-            >
+    <Card className={classes.root} height="75%">
+      <Link style={{ textDecoration: "none" }} to={`/product/${product.id}`}>
+        {" "}
+        <CardMedia
+          className={classes.media}
+          image={product.thumbnail}
+          title={product.name}
+        />
+        <CardContent>
+          <div className={classes.cardContent}>
+            <Typography variant="h5" gutterBottom>
               {product.name}
-            </Link>
-          </Typography>
-          <Typography variant="h5">{product.price}$</Typography>
-        </div>
-        <Box component="fieldset" borderColor="transparent">
+            </Typography>
+            <Typography variant="h6">{product.price}$</Typography>
+          </div>
           <Rating value={product.rate} readOnly />
-        </Box>
-      </CardContent>
-      <CardActions disableSpacing className={classes.cardAction}>
-        <IconButton aria-label="Add to cart" onClick={handleAddToCart}>
-          <AddShoppingCart />
-        </IconButton>
-      </CardActions>
+        </CardContent>
+      </Link>
     </Card>
   );
 };

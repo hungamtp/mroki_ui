@@ -29,4 +29,43 @@ export default makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
+  rateCard: {
+    display: "flex",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
+  rateContainer: {
+    display: "block",
+    alignItems: "center",
+  },
+  rateDetail: {
+    margin: "auto",
+    display: "inline-block",
+    alignItems: "center",
+  },
+  size: {
+    padding: 0,
+    marginTop: 20,
+    display: "flex",
+    justifyContent: "flex-start",
+  },
+  commentContainer: {
+    marginTop: 10,
+  },
+  comment: {
+    display: "flex",
+    marginTop: 5,
+    padding: 5,
+    justifyContent: "flex-start",
+  },
+  user: {
+    display: "flex",
+    alignItems: "start",
+  },
+  commentDetail: {
+    marginLeft: 10,
+  },
+  content: {
+    marginLeft: 4,
+  },
 }));

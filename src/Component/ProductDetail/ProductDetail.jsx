@@ -30,11 +30,19 @@ const ProductDetail = () => {
   const [sizes, setSizes] = useState([]);
   const [size, setSize] = useState();
   const [rate, setRate] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
   const classes = useStyles();
 
   const handleAddToCart = () => {
     cartApi.addToCart(28, { id: id, quantity: 1, size: size });
   };
+
+  // const fetchTotalPage = async () => {
+  //   const response = await commentApi.getCountComment(id);
+  //   setTotalPage(response.data);
+  //   console.log(totalPage);
+  // };
 
   const fetchProduct = async () => {
     const productData = await productApi.getProductDetail(id);
@@ -42,14 +50,13 @@ const ProductDetail = () => {
     return data;
   };
   const fetchComments = async () => {
-    const response = await commentApi.getAll(id, 0);
+    const response = await commentApi.getAll(id, currentPage);
     const data = await response.data.data;
     return data;
   };
 
   const fetchSize = async () => {
     const response = await sizeApi.getAllSize(id);
-
     return response.data;
   };
 
@@ -58,7 +65,13 @@ const ProductDetail = () => {
     return response.data;
   };
 
+  const fetchTotalPage = async () => {
+    const response = await commentApi.getTotalPageComment(id);
+    setTotalPage(response.data);
+  };
+
   useEffect(() => {
+    fetchTotalPage();
     fetchProduct().then((data) => {
       setProduct(data);
     });
@@ -71,10 +84,13 @@ const ProductDetail = () => {
     fetchAverageEate().then((everagrate) => {
       setRate(everagrate);
     });
-    fetchComments().then((commentData) => {
-      setComments(commentData);
-    });
+    fetchTotalPage();
   }, []);
+  useEffect(() => {
+    fetchComments().then((commentData) => {
+      setComments([...comments, commentData]);
+    });
+  }, [currentPage]);
 
   return (
     <div className={classes.root}>
@@ -122,7 +138,7 @@ const ProductDetail = () => {
                 <AddShoppingCart onClick={handleAddToCart} />
               </IconButton>
             </ButtonGroup>
-
+            <h3>Feedback</h3>
             <Card className={classes.rateContainer}>
               <div className={classes.rateCard}>
                 <h1>{rate.rate}</h1>
@@ -153,7 +169,7 @@ const ProductDetail = () => {
                 <span>{rate.countRate5} </span>
               </div>
             </Card>
-            <h3>Feedback</h3>
+
             <Card className={classes.commentContainer}>
               {comments.map((comment) => {
                 return (
@@ -171,6 +187,17 @@ const ProductDetail = () => {
                   </Card>
                 );
               })}
+              {currentPage === totalPage ? (
+                <></>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  LoadMore
+                </Button>
+              )}
             </Card>
           </Grid>
         </Grid>

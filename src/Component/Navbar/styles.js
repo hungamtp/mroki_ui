@@ -23,4 +23,8 @@ export default makeStyles((theme) => ({
   cart: {
     marginRight: "50px",
   },
+  menuList: {
+    marginTop: 40,
+    marginRight: 100,
+  },
 }));

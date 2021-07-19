@@ -4,14 +4,16 @@ import { Container } from "@material-ui/core";
 
 const Paginations = ({ totalPages, setCurrentPage }) => {
   return (
-    <Container maxWidth="lg">
-      <Pagination
-        count={totalPages}
-        variant="outlined"
-        color="primary"
-        onChange={(event, value) => setCurrentPage(value - 1)}
-      />
-    </Container>
+    <div className="pagination">
+      <Container maxWidth="lg">
+        <Pagination
+          count={totalPages}
+          variant="outlined"
+          color="primary"
+          onChange={(event, value) => setCurrentPage(value - 1)}
+        />
+      </Container>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -9,14 +9,26 @@ import Container from "@material-ui/core/Container";
 import useStyles from "./styles";
 import authApi from "../../../axios/authApi";
 
-const Login = () => {
+const Login = ({ closeModal }) => {
   const classes = useStyles();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [error, setError] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login();
+
+    login().then((data) => {
+      if (data.data == null) {
+        setError(true);
+      } else {
+        closeModal(true);
+        localStorage.setItem("username", data.data.username);
+        localStorage.setItem("avatar", data.data.avatar);
+        localStorage.setItem("userId", data.data.userId);
+        localStorage.setItem("jwtToken", data.data.jwt);
+      }
+    });
   };
 
   const login = async () => {
@@ -24,8 +36,8 @@ const Login = () => {
       username: username,
       password: password,
     });
-    const data = await response.data;
-    console.log(data);
+
+    return response.data;
   };
 
   return (
@@ -34,12 +46,14 @@ const Login = () => {
         <CssBaseline />
         <div className={classes.paper}>
           <Typography variant="h5">Log in</Typography>
+          {error && <div>Wrong usename or password</div>}
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="dense"
               required
               fullWidth
+              autoComplete="off"
               label="username"
               name="username"
               onChange={(e) => setUsername(e.target.value)}
@@ -54,14 +68,15 @@ const Login = () => {
               type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-
-            <Button
-              type="submit"
-              variant="contained"
-              className={classes.submit}
-            >
-              Log in
-            </Button>
+            <div className={classes.buttonContainer}>
+              <Button
+                type="submit"
+                variant="contained"
+                className={classes.submit}
+              >
+                Log in
+              </Button>
+            </div>
 
             <Grid container className={classes.bottomForm}>
               <Grid item xs>

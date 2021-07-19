@@ -13,9 +13,12 @@ export default makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    marginLeft: theme.spacing(17),
   },
   bottomForm: {
     marginBottom: theme.spacing(4),
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "center",
   },
 }));

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import useStyles from "./styles";
 import Products from "./Component/Products/Products";
 import Navbar from "./Component/Navbar/Navbar";
 import productApi from "./axios/productApi";
@@ -16,7 +15,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [cartIcon, setCartIcon] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPage] = useState();
+  const [totalPages, setTotalPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const onAddToCart = (product, quantity) => {
@@ -26,7 +25,6 @@ function App() {
 
   const getCurrentPage = (page) => {
     setCurrentPage(page);
-    console.log(currentPage);
   };
 
   const fetchCartIcon = async () => {
@@ -36,7 +34,7 @@ function App() {
 
   const fetchProducts = async () => {
     const response = await productApi.getAll(currentPage);
-    const productsData = response.data.data;
+    const productsData = response.data.data.content;
     return productsData;
   };
 
@@ -83,8 +81,8 @@ function App() {
                 onAddToCart={onAddToCart}
                 isLoading={isLoading}
               />
+
               <Paginations
-                className="pagination"
                 totalPages={totalPages}
                 setCurrentPage={getCurrentPage}
               />

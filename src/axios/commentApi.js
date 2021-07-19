@@ -16,6 +16,15 @@ const commentApi = {
     const url = `user/comment/total/${productId}`;
     return axiosClient.get(url);
   },
+  // getCountComment(productId) {
+  //   const url = `user/comment/total/${productId}`;
+  //   return axiosClient.get(url);
+  // },
+
+  getTotalPageComment(productId) {
+    const url = `user/comment/count/${productId}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default commentApi;

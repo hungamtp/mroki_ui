@@ -6,4 +6,8 @@ export default makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
   },
+  pagination: {
+    display: "flex",
+    justifyContent: "space-around",
+  },
 }));

@@ -27,11 +27,6 @@ function App() {
     setCurrentPage(page);
   };
 
-  const fetchCartIcon = async () => {
-    const response = await cartApi.getCartIcon(9);
-    return response.data;
-  };
-
   const fetchProducts = async () => {
     const response = await productApi.getAll(currentPage);
     const productsData = response.data.data.content;
@@ -52,9 +47,6 @@ function App() {
   }, [currentPage]);
 
   useEffect(() => {
-    fetchCartIcon().then((data) => {
-      setCartIcon(data);
-    });
     fetchTotalPage().then((totalPage) => {
       setTotalPage(totalPage);
     });
@@ -64,7 +56,7 @@ function App() {
     <Router>
       <div>
         <Container maxWidth="lg">
-          <Navbar cartIcon={cartIcon} />
+          <Navbar />
           <Switch>
             <Route exact path="/product/:id">
               <ProductDetail />

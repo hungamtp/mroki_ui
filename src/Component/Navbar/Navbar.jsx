@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -17,15 +17,20 @@ import logo from "../../assets/logo.jpg";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
 import Login from "./Login/Login";
+import cartApi from "../../axios/cartApi";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-const Navbar = ({ cartIcon }) => {
+const Navbar = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [avatar, setAvatar] = useState();
+  const [username, setUsername] = useState();
+  const [userId, setUserId] = useState();
+  const [cartIcon, setCartIcon] = useState({});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -35,27 +40,42 @@ const Navbar = ({ cartIcon }) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {};
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("avatar");
     localStorage.removeItem("userId");
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("authenticated");
+    setAuthenticated(false);
     setAnchorEl(null);
   };
 
   const handleClose = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("avatar");
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("userId");
     setOpen(false);
   };
   const closeModal = (close) => {
     setAuthenticated(true);
     handleClose();
   };
+
+  const fetchCartIcon = async () => {
+    const response = cartApi.getCartIcon(userId);
+    return (await response).data;
+  };
+
+  useEffect(() => {
+    setUsername(localStorage.getItem("username"));
+    setAvatar(localStorage.getItem("avatar"));
+    setUserId(localStorage.getItem("userId"));
+
+    fetchCartIcon().then((cartData) => {
+      setCartIcon(cartData);
+    });
+  }, [authenticated]);
 
   return (
     <>
@@ -71,22 +91,24 @@ const Navbar = ({ cartIcon }) => {
               />
             </Link>
           </Typography>
-          <IconButton
-            aria-label="Show cart items"
-            color="inherit"
-            className={classes.cart}
-          >
-            <Badge badgeContent={cartIcon.count} color="secondary">
-              <ShoppingCart />
-            </Badge>
-          </IconButton>
+
           {authenticated ? (
             <>
+              <IconButton
+                aria-label="Show cart items"
+                color="inherit"
+                className={classes.cart}
+              >
+                <Badge badgeContent={cartIcon.count} color="secondary">
+                  <ShoppingCart />
+                </Badge>
+              </IconButton>
               <Avatar
                 alt="Remy Sharp"
-                src={localStorage.getItem("avatar")}
+                src={avatar}
                 onClick={handleMenuClickOpen}
               />
+              {/* {username} */}
               <Menu
                 className={classes.menuList}
                 id="simple-menu"
@@ -96,7 +118,7 @@ const Navbar = ({ cartIcon }) => {
                 onClose={handleMenuClose}
               >
                 <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+                <MenuItem onClick={handleMenuClose}>Orders</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </>

@@ -35,7 +35,9 @@ const ProductDetail = () => {
   const classes = useStyles();
 
   const handleAddToCart = () => {
-    cartApi.addToCart(28, { id: id, quantity: 1, size: size });
+    if (localStorage.getItem("authenticated") === "true") {
+      cartApi.addToCart(28, { id: id, quantity: 1, size: size });
+    }
   };
 
   // const fetchTotalPage = async () => {

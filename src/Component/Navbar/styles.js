@@ -27,4 +27,9 @@ export default makeStyles((theme) => ({
     marginTop: 40,
     marginRight: 100,
   },
+  formSearch: {
+    backgroundColor: "#ffffff",
+    borderRadius: 5,
+    marginRight: 10,
+  },
 }));

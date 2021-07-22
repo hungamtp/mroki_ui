@@ -6,13 +6,13 @@ const cartApi = {
     return axiosClient.get(url);
   },
 
-  addToCart(cartId, product) {
-    const url = `user/cart/${cartId}`;
+  addToCart(userId, product) {
+    const url = `user/cart/${userId}`;
     return axiosClient.post(url, product);
   },
 
-  getCartIcon(customerId) {
-    const url = `user/cart?customerId=${customerId}`;
+  getCartIcon(userId) {
+    const url = `user/cart?customerId=${userId}`;
     return axiosClient.get(url);
   },
 };

@@ -36,15 +36,13 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (localStorage.getItem("authenticated") === "true") {
-      cartApi.addToCart(28, { id: id, quantity: 1, size: size });
+      cartApi.addToCart(localStorage.getItem("userId"), {
+        id: id,
+        quantity: 1,
+        size: size,
+      });
     }
   };
-
-  // const fetchTotalPage = async () => {
-  //   const response = await commentApi.getCountComment(id);
-  //   setTotalPage(response.data);
-  //   console.log(totalPage);
-  // };
 
   const fetchProduct = async () => {
     const productData = await productApi.getProductDetail(id);
@@ -89,9 +87,11 @@ const ProductDetail = () => {
     fetchTotalPage();
   }, []);
   useEffect(() => {
-    fetchComments().then((commentData) => {
-      setComments([...comments, commentData]);
-    });
+    fetchComments()
+      .then((commentData) => {
+        setComments([...comments, ...commentData]);
+      })
+      .then(console.log(comments));
   }, [currentPage]);
 
   return (
@@ -183,13 +183,13 @@ const ProductDetail = () => {
                       </div>
                     </div>
                     <div className={classes.commentDetail}>
-                      <div className={classes.content}>{comment.content}</div>
+                      <div className={classes.content1}>{comment.content}</div>
                       <Rating value={comment.rate} readOnly />
                     </div>
                   </Card>
                 );
               })}
-              {currentPage === totalPage ? (
+              {currentPage === totalPage - 1 ? (
                 <></>
               ) : (
                 <Button

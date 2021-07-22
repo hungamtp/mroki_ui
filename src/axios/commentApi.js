@@ -2,8 +2,8 @@ import axiosClient from "./axiosClient";
 
 const commentApi = {
   getAll(productId, page) {
-    const url = `user/comment/${productId}`;
-    return axiosClient.get(url, page);
+    const url = `user/comment/${productId}?page=${page}`;
+    return axiosClient.get(url);
   },
 
   comment(comment, productId, customerId) {

@@ -65,7 +65,10 @@ export default makeStyles((theme) => ({
   commentDetail: {
     marginLeft: 10,
   },
-  content: {
+  content1: {
     marginLeft: 4,
+  },
+  commentContainer: {
+    marginTop: 10,
   },
 }));

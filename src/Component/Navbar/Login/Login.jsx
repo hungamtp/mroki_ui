@@ -27,6 +27,7 @@ const Login = ({ closeModal }) => {
         localStorage.setItem("avatar", data.data.avatar);
         localStorage.setItem("userId", data.data.userId);
         localStorage.setItem("jwtToken", data.data.jwt);
+        localStorage.setItem("role", data.data.role);
         localStorage.setItem("authenticated", true);
       }
     });

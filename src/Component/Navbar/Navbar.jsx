@@ -11,6 +11,7 @@ import {
   Avatar,
   Menu,
   MenuItem,
+  TextField,
 } from "@material-ui/core";
 import { ShoppingCart } from "@material-ui/icons";
 import logo from "../../assets/logo.jpg";
@@ -28,9 +29,7 @@ const Navbar = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [avatar, setAvatar] = useState();
-  const [username, setUsername] = useState();
-  const [userId, setUserId] = useState();
-  const [cartIcon, setCartIcon] = useState({});
+  const [cartIcon, setCartIcon] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -49,7 +48,7 @@ const Navbar = () => {
     localStorage.removeItem("avatar");
     localStorage.removeItem("userId");
     localStorage.removeItem("jwtToken");
-    localStorage.removeItem("authenticated");
+    localStorage.setItem("authenticated", false);
     setAuthenticated(false);
     setAnchorEl(null);
   };
@@ -63,17 +62,13 @@ const Navbar = () => {
   };
 
   const fetchCartIcon = async () => {
-    const response = cartApi.getCartIcon(userId);
+    const response = cartApi.getCartIcon(localStorage.getItem("userId"));
     return (await response).data;
   };
 
   useEffect(() => {
-    setUsername(localStorage.getItem("username"));
-    setAvatar(localStorage.getItem("avatar"));
-    setUserId(localStorage.getItem("userId"));
-
-    fetchCartIcon().then((cartData) => {
-      setCartIcon(cartData);
+    fetchCartIcon().then((count) => {
+      setCartIcon(count.data);
     });
   }, [authenticated]);
 
@@ -91,15 +86,22 @@ const Navbar = () => {
               />
             </Link>
           </Typography>
-
-          {authenticated ? (
+          <form noValidate autoComplete="off">
+            <TextField
+              className={classes.formSearch}
+              id="standard-basic"
+              label="search"
+              size="small"
+            />
+          </form>
+          {localStorage.getItem("authenticated") === "true" ? (
             <>
               <IconButton
                 aria-label="Show cart items"
                 color="inherit"
                 className={classes.cart}
               >
-                <Badge badgeContent={cartIcon.count} color="secondary">
+                <Badge badgeContent={cartIcon} color="secondary">
                   <ShoppingCart />
                 </Badge>
               </IconButton>
@@ -108,7 +110,6 @@ const Navbar = () => {
                 src={avatar}
                 onClick={handleMenuClickOpen}
               />
-              {/* {username} */}
               <Menu
                 className={classes.menuList}
                 id="simple-menu"

@@ -87,11 +87,9 @@ const ProductDetail = () => {
     fetchTotalPage();
   }, []);
   useEffect(() => {
-    fetchComments()
-      .then((commentData) => {
-        setComments([...comments, ...commentData]);
-      })
-      .then(console.log(comments));
+    fetchComments().then((commentData) => {
+      setComments([...comments, ...commentData]);
+    });
   }, [currentPage]);
 
   return (

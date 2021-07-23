@@ -86,14 +86,14 @@ const Navbar = () => {
               />
             </Link>
           </Typography>
-          <form noValidate autoComplete="off">
+          {/* <form noValidate autoComplete="off">
             <TextField
               className={classes.formSearch}
               id="standard-basic"
               label="search"
               size="small"
             />
-          </form>
+          </form> */}
           {localStorage.getItem("authenticated") === "true" ? (
             <>
               <IconButton

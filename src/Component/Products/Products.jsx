@@ -7,9 +7,8 @@ import { Skeleton } from "@material-ui/lab";
 const Products = ({ products, onAddToCart, isLoading }) => {
   const classes = useStyles();
   return (
-    <main className={classes.content}>
-      <div className={classes.toolbar} />
-      <Grid container justify="center" spacing={4}>
+    <div className={classes.content}>
+      <Grid container justify="center" spacing={2}>
         {products.map((product) => {
           return (
             <Grid item key={product.id} xs={12} sm={4} md={4}>
@@ -22,7 +21,7 @@ const Products = ({ products, onAddToCart, isLoading }) => {
           );
         })}
       </Grid>
-    </main>
+    </div>
   );
 };
 

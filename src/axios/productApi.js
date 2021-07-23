@@ -18,9 +18,15 @@ const productApi = {
     return axiosClient.get(url);
   },
 
+  // admin fuction
   getAllAdminProduct(page, size, sort) {
     const url = `admin/product?page=${page}&size=${size}&sort=${sort}`;
     return axiosClient.get(url);
+  },
+
+  deleteProduct(productId) {
+    const url = `admin/product/${productId}`;
+    return axiosClient.delete(url);
   },
 };
 

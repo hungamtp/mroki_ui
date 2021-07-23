@@ -6,6 +6,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { Products } from "./Products/Products";
 import { Categories } from "./Categories/Categories";
+import { Container } from "@material-ui/core";
 
 export const Admin = () => {
   const history = useHistory();
@@ -21,7 +22,7 @@ export const Admin = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <Container maxWidth="lg" className={classes.root}>
       <Paper square>
         <Tabs
           value={value}
@@ -58,6 +59,6 @@ export const Admin = () => {
       </Paper>
       {currentTab === "Product" && <Products />}
       {currentTab === "Categories" && <Categories />}
-    </div>
+    </Container>
   );
 };

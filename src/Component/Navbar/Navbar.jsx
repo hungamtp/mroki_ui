@@ -6,35 +6,29 @@ import {
   Typography,
   IconButton,
   Button,
-  Dialog,
   Slide,
   Avatar,
   Menu,
   MenuItem,
-  TextField,
 } from "@material-ui/core";
 import { ShoppingCart } from "@material-ui/icons";
 import logo from "../../assets/logo.jpg";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
-import Login from "./Login/Login";
 import cartApi from "../../axios/cartApi";
+import { useHistory } from "react-router";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 const Navbar = () => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [avatar, setAvatar] = useState();
+
   const [cartIcon, setCartIcon] = useState(0);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const history = useHistory();
+  const handleClickLogin = () => {
+    history.push("/login");
   };
-
   const handleMenuClickOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -51,14 +45,6 @@ const Navbar = () => {
     localStorage.setItem("authenticated", false);
     setAuthenticated(false);
     setAnchorEl(null);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const closeModal = (close) => {
-    setAuthenticated(true);
-    handleClose();
   };
 
   const fetchCartIcon = async () => {
@@ -86,14 +72,6 @@ const Navbar = () => {
               />
             </Link>
           </Typography>
-          {/* <form noValidate autoComplete="off">
-            <TextField
-              className={classes.formSearch}
-              id="standard-basic"
-              label="search"
-              size="small"
-            />
-          </form> */}
           {localStorage.getItem("authenticated") === "true" ? (
             <>
               <IconButton
@@ -107,7 +85,7 @@ const Navbar = () => {
               </IconButton>
               <Avatar
                 alt="Remy Sharp"
-                src={avatar}
+                src={localStorage.getItem("avatar")}
                 onClick={handleMenuClickOpen}
               />
               <Menu
@@ -124,27 +102,12 @@ const Navbar = () => {
               </Menu>
             </>
           ) : (
-            <Button variant="contained" onClick={handleClickOpen}>
+            <Button variant="contained" onClick={handleClickLogin}>
               Login
             </Button>
           )}
         </Toolbar>
       </AppBar>
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        disableEscapeKeyDown
-        disableBackdropClick
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <Login closeModal={closeModal} />
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-      </Dialog>
     </>
   );
 };

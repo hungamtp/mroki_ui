@@ -71,4 +71,9 @@ export default makeStyles((theme) => ({
   commentContainer: {
     marginTop: 10,
   },
+  button: {
+    marginTop: 10,
+    display: "flex",
+    justifyContent: "space-around",
+  },
 }));

@@ -9,7 +9,7 @@ img {
   position: relative;
 }
 #table-scroll {
-  height: 600px;
+  height: 800px;
   overflow: auto;
   margin-top: 20px;
 }
@@ -26,4 +26,9 @@ img {
 td {
   text-align: center;
   vertical-align: middle;
+}
+.big {
+  width: 95vw;
+  height: 82vh;
+  justify-content: space-around;
 }

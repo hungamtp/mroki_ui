@@ -10,16 +10,11 @@ import { Container } from "@material-ui/core";
 
 export const Admin = () => {
   const history = useHistory();
-  const [currentTab, setCurrentTab] = useState();
   if (localStorage.getItem("role") !== "Admin") {
     history.push("/");
   }
   const classes = useStyles();
-  const [value, setValue] = React.useState(2);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const [value, setValue] = useState(0);
 
   return (
     <Container maxWidth="lg" className={classes.root}>
@@ -28,37 +23,16 @@ export const Admin = () => {
           value={value}
           indicatorColor="primary"
           textColor="primary"
-          onChange={handleChange}
-          aria-label="disabled tabs example"
+          onChange={(e, value) => setValue(value)}
         >
-          <Tab
-            label="Product"
-            onClick={() => {
-              setCurrentTab("Product");
-            }}
-          />
-          <Tab
-            label="Customer"
-            onClick={() => {
-              setCurrentTab("Customer");
-            }}
-          />
-          <Tab
-            label="Profit"
-            onClick={() => {
-              setCurrentTab("Profit");
-            }}
-          />
-          <Tab
-            label="Category"
-            onClick={() => {
-              setCurrentTab("Categories");
-            }}
-          />
+          <Tab label="Product" aria-selected />
+          <Tab label="Customer" />
+          <Tab label="Profit" />
+          <Tab label="Category" />
         </Tabs>
       </Paper>
-      {currentTab === "Product" && <Products />}
-      {currentTab === "Categories" && <Categories />}
+      {value === 0 && <Products />}
+      {value === 3 && <Categories />}
     </Container>
   );
 };

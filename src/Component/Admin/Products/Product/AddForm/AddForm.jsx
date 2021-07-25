@@ -9,7 +9,10 @@ import {
 } from "@material-ui/core";
 import storage from "../../../../../firebase/firebase";
 import useStyles from "./styles";
-export const AddForm = () => {
+import productApi from "../../../../../axios/productApi";
+import categoryApi from "../../../../../axios/categoryApi";
+import { useEffect } from "react";
+export const AddForm = ({ closeAddForm }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
@@ -18,13 +21,20 @@ export const AddForm = () => {
   const [thumbnail, setThumbnail] = useState(null);
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [image1Url, setImage1Url] = useState("");
   const [image2Url, setImage2Url] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const classes = useStyles();
-  const handleChange = (event) => {};
+  const close = () => {
+    // closeAddForm(true);
+  };
+  const handleChange = (event) => {
+    setCategoryId(event.target.value);
+  };
   const handleThumbnail = (e) => {
     if (e.target.files[0]) {
       setThumbnail(e.target.files[0]);
@@ -40,6 +50,26 @@ export const AddForm = () => {
       setImage2(e.target.files[0]);
     }
   };
+  const addProduct = () => {
+    productApi.addProduct({
+      name: name,
+      price: price,
+      retail: retail,
+      description: description,
+      saleOff: saleOff,
+      categoryId: categoryId,
+      thumbnail: thumbnailUrl,
+      image1: image1Url,
+      image2: image2Url,
+    });
+  };
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const response = await categoryApi.getAllSubCategory();
+      await setCategories(response.data.data);
+    };
+    fetchCategory();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -60,56 +90,71 @@ export const AddForm = () => {
           .getDownloadURL()
           .then((url) => {
             setThumbnailUrl(url);
+            if (image1 === null) {
+              addProduct();
+              setIsLoading(false);
+              close();
+            } else {
+              const uploadTask = storage
+                .ref(`product-image/${name}.2`)
+                .put(image1);
+              uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                  var percentage =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  console.log(percentage);
+                },
+                (error) => {},
+                () => {
+                  storage
+                    .ref("product-image")
+                    .child(`${name}.2`)
+                    .getDownloadURL()
+                    .then((url) => {
+                      setImage1Url(url);
+                      if (image2 === null) {
+                        addProduct();
+                        setIsLoading(false);
+                        close();
+                      } else {
+                        const uploadTask = storage
+                          .ref(`product-image/${name}.3`)
+                          .put(image2);
+                        uploadTask.on(
+                          "state_changed",
+                          (snapshot) => {
+                            var percentage =
+                              (snapshot.bytesTransferred /
+                                snapshot.totalBytes) *
+                              100;
+                            console.log(percentage);
+                          },
+                          (error) => {},
+                          () => {
+                            storage
+                              .ref("product-image")
+                              .child(`${name}.3`)
+                              .getDownloadURL()
+                              .then((url) => {
+                                setImage2Url(url);
+                                addProduct();
+                                setIsLoading(false);
+                                close();
+                              });
+                          }
+                        );
+                      }
+                    });
+                }
+              );
+            }
           });
       }
     );
-
-    if (image1 !== null) {
-      const uploadTask = storage.ref(`product-image/${name}.2`).put(image1);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          var percentage =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(percentage);
-        },
-        (error) => {},
-        () => {
-          storage
-            .ref("product-image")
-            .child(`${name}.2`)
-            .getDownloadURL()
-            .then((url) => {
-              setImage1Url(url);
-            });
-        }
-      );
-    }
-    if (image2 !== null) {
-      const uploadTask = storage.ref(`product-image/${name}.3`).put(image2);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          var percentage =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(percentage);
-        },
-        (error) => {},
-        () => {
-          storage
-            .ref("product-image")
-            .child(`${name}.3`)
-            .getDownloadURL()
-            .then((url) => {
-              setImage2Url(url);
-            });
-        }
-      );
-    }
-    setIsLoading(false);
   };
   return (
-    <div className={classes.form}>
+    <div className={classes.form} onSubmit={addProduct}>
       <h2 className={classes.nameForm}>Add Product</h2>
       <form noValidate onSubmit={handleSubmit}>
         <div className={classes.subForm}>
@@ -175,9 +220,9 @@ export const AddForm = () => {
               className={classes.selectCategory}
               onChange={handleChange}
             >
-              <MenuItem value={10}>Gym</MenuItem>
-              <MenuItem value={20}>Life Style</MenuItem>
-              <MenuItem value={30}>Running</MenuItem>
+              {categories.map((category) => {
+                return <MenuItem value={category.id}>{category.name}</MenuItem>;
+              })}
             </Select>
           </div>
         </div>

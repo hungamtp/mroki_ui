@@ -13,10 +13,12 @@ import {
   Dialog,
   Slide,
   DialogTitle,
-  Card,
-  Fab,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@material-ui/core";
 import Paginations from "../../Pagination/Pagination";
+import categoryApi from "../../../axios/categoryApi";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -32,18 +34,33 @@ export const Products = () => {
   const [sort, setSort] = useState("id");
   const [productUpdate, setProductUpdate] = useState({});
   const [productDelete, setProductDelete] = useState({});
+  const [search, setSearch] = useState("");
+  const [nameSearch, setNameSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
 
   const classes = useStyles();
+
+  const getCategory = (category) => {
+    if (category === "All Category") {
+      setCategory("");
+    } else {
+      setCategory(category);
+    }
+    setSearch(`,name:${nameSearch},categoryId:${category}`);
+  };
 
   const fetchProducts = async () => {
     const response = await productApi.getAllAdminProduct(
       currentPage,
       size,
-      sort
+      sort,
+      search
     );
     const productsData = response.data;
     return productsData;
   };
+
   const handleCloseAddForm = () => {
     setOpenDialogAdd(false);
   };
@@ -73,12 +90,27 @@ export const Products = () => {
     setProductDelete(product);
   };
 
+  const closeAddForm = () => {
+    handleCloseAddForm();
+  };
+
+  const sortBy = (sortType) => {
+    setSort(sortType);
+    console.log(sortType);
+  };
+
   const openDialog = () => {
     handleOpenAddForm();
   };
-
+  const getSize = (size) => {
+    setSize(size);
+  };
   const getCurrentPage = (currentPage) => {
     setCurrentPage(currentPage);
+  };
+
+  const getName = (name) => {
+    setSearch(`,name:${name},categoryId:${category}`);
   };
 
   const deleteProduct = async () => {
@@ -88,28 +120,39 @@ export const Products = () => {
       (product) => product.id !== productDelete.id
     );
     setProducts(newProducts);
-    console.log((await response).data);
   };
 
   useEffect(() => {
     fetchProducts().then((response) => {
-      setProducts([...products, ...response.data.data]);
+      setProducts(response.data.data);
       setTotalPage(response.data.totalPage);
       setTotalElement(response.data.totalElement);
     });
-  }, [currentPage, size, sort]);
+  }, [currentPage, size, sort, search]);
+
+  useEffect(() => {
+    const fetchAllSubCategory = async () => {
+      const response = await categoryApi.getAllSubCategory();
+      setCategories(response.data.data);
+    };
+    fetchAllSubCategory();
+  }, []);
   return (
     <div>
-      <Container maxWidth className={classes.big}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Card className={classes.filterContainer}>
-              <Filter openDialog={openDialog} />
-            </Card>
+      <Container maxWidth="lg" class="big">
+        <Grid container justify="center" spacing={4} class="main">
+          <Grid item xs={2} sm={2} md={2}>
+            <Filter
+              sortBy={sortBy}
+              getSize={getSize}
+              getName={getName}
+              getCategory={getCategory}
+              openDialog={openDialog}
+              closeAddForm={closeAddForm}
+            />
           </Grid>
-        </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
+
+          <Grid item xs={10} sm={10} md={10}>
             <div id="table-wrapper">
               <div id="table-scroll">
                 <table class="products">
@@ -146,10 +189,10 @@ export const Products = () => {
       </Container>
       <div className={classes.pagination}>
         <Paginations setCurrentPage={getCurrentPage} totalPages={totalPage} />
-        <Button onClick={() => setCurrentPage(currentPage + 1)}>
-          Load more
-        </Button>
-        {totalElement} Element
+
+        <div className={classes.totalElement}>
+          <b>Total products:{totalElement}</b>
+        </div>
       </div>
 
       <Dialog

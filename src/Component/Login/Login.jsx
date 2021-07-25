@@ -7,14 +7,18 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import useStyles from "./styles";
-import authApi from "../../../axios/authApi";
+import authApi from "../../axios/authApi";
+import { useHistory } from "react-router";
 
-const Login = ({ closeModal }) => {
+const Login = () => {
   const classes = useStyles();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [error, setError] = useState(false);
-
+  const history = useHistory();
+  if (localStorage.getItem("authenticated") === "true") {
+    history.push("/");
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -22,13 +26,13 @@ const Login = ({ closeModal }) => {
       if (data.data == null) {
         setError(true);
       } else {
-        closeModal(true);
         localStorage.setItem("username", data.data.username);
         localStorage.setItem("avatar", data.data.avatar);
         localStorage.setItem("userId", data.data.userId);
         localStorage.setItem("jwtToken", data.data.jwt);
         localStorage.setItem("role", data.data.role);
         localStorage.setItem("authenticated", true);
+        history.push("/");
       }
     });
   };

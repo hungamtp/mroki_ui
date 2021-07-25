@@ -9,4 +9,8 @@ export default makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
   },
+  totalElement: {
+    marginTop: 5,
+    marginLeft: 100,
+  },
 }));

@@ -13,15 +13,16 @@ const productApi = {
     const url = `user/product/${id}`;
     return axiosClient.get(url);
   },
-  getTotalPage() {
-    const url = `user/product/totalPage`;
+
+  // admin fuction
+  getAllAdminProduct(page, size, sort, search) {
+    const url = `admin/product?page=${page}&size=${size}&sort=${sort}&search=isDelete:false${search}`;
     return axiosClient.get(url);
   },
 
-  // admin fuction
-  getAllAdminProduct(page, size, sort) {
-    const url = `admin/product?page=${page}&size=${size}&sort=${sort}`;
-    return axiosClient.get(url);
+  addProduct(product) {
+    const url = "admin/product";
+    return axiosClient.post(url, product);
   },
 
   deleteProduct(productId) {

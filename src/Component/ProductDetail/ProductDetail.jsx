@@ -25,6 +25,7 @@ import { AddShoppingCart } from "@material-ui/icons";
 
 const ProductDetail = () => {
   let { id } = useParams();
+
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
   const [sizes, setSizes] = useState([]);
@@ -51,8 +52,7 @@ const ProductDetail = () => {
   };
   const fetchComments = async () => {
     const response = await commentApi.getAll(id, currentPage);
-    const data = await response.data.data;
-    return data;
+    return await response.data.data;
   };
 
   const fetchSize = async () => {
@@ -65,18 +65,9 @@ const ProductDetail = () => {
     return response.data;
   };
 
-  const fetchTotalPage = async () => {
-    const response = await commentApi.getTotalPageComment(id);
-    setTotalPage(response.data);
-  };
-
   useEffect(() => {
-    fetchTotalPage();
     fetchProduct().then((data) => {
       setProduct(data);
-    });
-    fetchComments().then((commentData) => {
-      setComments(commentData);
     });
     fetchSize().then((sizeData) => {
       setSizes(sizeData);
@@ -84,11 +75,11 @@ const ProductDetail = () => {
     fetchAverageEate().then((everagrate) => {
       setRate(everagrate);
     });
-    fetchTotalPage();
   }, []);
   useEffect(() => {
     fetchComments().then((commentData) => {
-      setComments([...comments, ...commentData]);
+      setComments([...comments, ...commentData.data]);
+      setTotalPage(commentData.totalPage);
     });
   }, [currentPage]);
 
@@ -187,18 +178,20 @@ const ProductDetail = () => {
                   </Card>
                 );
               })}
-              {currentPage === totalPage - 1 ? (
-                <></>
-              ) : (
+            </Card>
+            {currentPage === totalPage - 1 ? (
+              <></>
+            ) : (
+              <div className={classes.button}>
                 <Button
                   variant="contained"
                   color="secondary"
                   onClick={() => setCurrentPage(currentPage + 1)}
                 >
-                  LoadMore
+                  Show More
                 </Button>
-              )}
-            </Card>
+              </div>
+            )}
           </Grid>
         </Grid>
       </Container>

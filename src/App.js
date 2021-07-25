@@ -8,7 +8,7 @@ import { Container, Grid } from "@material-ui/core";
 import ProductDetail from "./Component/ProductDetail/ProductDetail";
 import Paginations from "./Component/Pagination/Pagination";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Login from "./Component/Navbar/Login/Login";
+import Login from "./Component/Login/Login";
 import { Admin } from "./Component/Admin/Admin";
 import { Filter } from "./Component/Filter/Filter";
 
@@ -34,6 +34,7 @@ function App() {
     fetchProducts().then((productsData) => {
       setIsLoading(true);
       setProducts(productsData.data);
+
       setTotalPage(productsData.totalPage);
       setIsLoading(false);
     });

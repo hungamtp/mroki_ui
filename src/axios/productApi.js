@@ -1,8 +1,8 @@
 import axiosClient from "./axiosClient";
 
 const productApi = {
-  getAll(page, size, sort) {
-    const url = `user/product?page=${page}&size=${size}&sort=${sort}`;
+  getAll(page, size, sort, search) {
+    const url = `user/product?page=${page}&size=${size}&sort=${sort}&search=isDelete:false${search}`;
     return axiosClient.get(url);
   },
   getAllByName(name, page) {

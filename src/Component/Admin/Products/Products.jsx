@@ -42,25 +42,25 @@ export const Products = () => {
 
   const classes = useStyles();
 
-  const getCategory = async (category) => {
+  const getCategory = (category) => {
     if (category === "All Category") {
-      await setCategorySearch("");
+      setCategorySearch("");
     } else {
-      await setCategorySearch(category);
+      setCategorySearch(category);
     }
-    await setSearch(
+    setSearch(
       `,name:${nameSearch},categoryId:${category},price${priceSearch[0]}:${priceSearch[1]}`
     );
   };
-  const getName = async (name) => {
-    await setNameSearch(name);
-    await setSearch(
+  const getName = (name) => {
+    setNameSearch(name);
+    setSearch(
       `,name:${name},categoryId:${categorySearch},price${priceSearch[0]}:${priceSearch[1]}`
     );
   };
-  const getPrice = async (price) => {
-    await setPriceSearch(price);
-    await setSearch(
+  const getPrice = (price) => {
+    setPriceSearch(price);
+    setSearch(
       `,name:${nameSearch},categoryId:${categorySearch},price${price[0]}:${price[1]}`
     );
   };

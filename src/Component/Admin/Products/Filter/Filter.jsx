@@ -96,7 +96,7 @@ export const Filter = ({
           <FormControlLabel value="price" control={<Radio />} label="Price" />
         </RadioGroup>
       </FormControl>
-      <Typography gutterBottom>Display {size} products</Typography>
+      <Typography gutterBottom>Display {size} products / page</Typography>
       <Slider
         defaultValue={12}
         getAriaValueText={handleSizeChange}

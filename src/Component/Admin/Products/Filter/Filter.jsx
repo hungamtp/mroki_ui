@@ -23,19 +23,32 @@ export const Filter = ({
   getSize,
   getName,
   getCategory,
+  getPrice,
   closeAddForm,
 }) => {
   const classes = useStyles();
 
   const [search, setSearch] = useState("");
+  const [size, setSize] = useState("");
   const [category, setCategory] = useState("All Category");
   const [categories, setCategories] = useState([]);
+  const [price, setPrice] = useState([30, 200]);
+
   const handleCategoryChange = (e) => {
     getCategory(e.target.value);
     setCategory(e.target.value);
   };
+  const handleSizeChange = (size) => {
+    getSize(size);
+    setSize(size);
+  };
   const handleAdd = () => {
     openDialog();
+  };
+
+  const handlePriceChange = (event, newValue) => {
+    getPrice(newValue);
+    setPrice(newValue);
   };
   useEffect(() => {
     const fetchCategory = async () => {
@@ -83,10 +96,10 @@ export const Filter = ({
           <FormControlLabel value="price" control={<Radio />} label="Price" />
         </RadioGroup>
       </FormControl>
-      <Typography gutterBottom>Display </Typography>
+      <Typography gutterBottom>Display {size} products</Typography>
       <Slider
         defaultValue={12}
-        getAriaValueText={(value) => getSize(value)}
+        getAriaValueText={handleSizeChange}
         aria-labelledby="discrete-slider-small-steps"
         step={3}
         marks
@@ -95,7 +108,19 @@ export const Filter = ({
         valueLabelDisplay="auto"
       />
       <h3>Filter</h3>
-
+      <div className={classes.price}>
+        <Typography id="range-slider" gutterBottom>
+          Price :{price[0]}-{price[1]} $
+        </Typography>
+        <Slider
+          value={price}
+          onChange={handlePriceChange}
+          valueLabelDisplay="auto"
+          min={30}
+          max={300}
+          aria-labelledby="range-slider"
+        />
+      </div>
       <InputLabel id="category">Category</InputLabel>
       <Select
         labelId="category"
@@ -108,6 +133,7 @@ export const Filter = ({
           return <MenuItem value={category.id}>{category.name}</MenuItem>;
         })}
       </Select>
+
       <div className={classes.button}>
         <Button
           variant="contained"

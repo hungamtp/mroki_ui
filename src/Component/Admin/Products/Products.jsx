@@ -36,18 +36,33 @@ export const Products = () => {
   const [productDelete, setProductDelete] = useState({});
   const [search, setSearch] = useState("");
   const [nameSearch, setNameSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const [categorySearch, setCategorySearch] = useState("");
+  const [priceSearch, setPriceSearch] = useState([30, 200]);
   const [categories, setCategories] = useState([]);
 
   const classes = useStyles();
 
-  const getCategory = (category) => {
+  const getCategory = async (category) => {
     if (category === "All Category") {
-      setCategory("");
+      await setCategorySearch("");
     } else {
-      setCategory(category);
+      await setCategorySearch(category);
     }
-    setSearch(`,name:${nameSearch},categoryId:${category}`);
+    await setSearch(
+      `,name:${nameSearch},categoryId:${category},price${priceSearch[0]}:${priceSearch[1]}`
+    );
+  };
+  const getName = async (name) => {
+    await setNameSearch(name);
+    await setSearch(
+      `,name:${name},categoryId:${categorySearch},price${priceSearch[0]}:${priceSearch[1]}`
+    );
+  };
+  const getPrice = async (price) => {
+    await setPriceSearch(price);
+    await setSearch(
+      `,name:${nameSearch},categoryId:${categorySearch},price${price[0]}:${price[1]}`
+    );
   };
 
   const fetchProducts = async () => {
@@ -96,7 +111,6 @@ export const Products = () => {
 
   const sortBy = (sortType) => {
     setSort(sortType);
-    console.log(sortType);
   };
 
   const openDialog = () => {
@@ -107,10 +121,6 @@ export const Products = () => {
   };
   const getCurrentPage = (currentPage) => {
     setCurrentPage(currentPage);
-  };
-
-  const getName = (name) => {
-    setSearch(`,name:${name},categoryId:${category}`);
   };
 
   const deleteProduct = async () => {
@@ -149,6 +159,7 @@ export const Products = () => {
               getCategory={getCategory}
               openDialog={openDialog}
               closeAddForm={closeAddForm}
+              getPrice={getPrice}
             />
           </Grid>
 

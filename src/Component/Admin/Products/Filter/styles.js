@@ -13,4 +13,7 @@ export default makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-around",
   },
+  price: {
+    marginTop: 10,
+  },
 }));

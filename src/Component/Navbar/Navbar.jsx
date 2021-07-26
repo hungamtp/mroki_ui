@@ -14,17 +14,20 @@ import { ShoppingCart } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 import useStyles from "./styles";
-import cartApi from "../../axios/cartApi";
+import { useLocation } from "react-router";
 import { useHistory } from "react-router";
 
 const Navbar = ({ authenticated, cartIcon }) => {
   const classes = useStyles();
+  const location = useLocation();
+  const [showCart, setShowCart] = useState(true);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [auth, setAuth] = useState(authenticated);
   const history = useHistory();
   const handleClickLogin = () => {
+    handleMenuClose();
     history.push("/login");
   };
   const handleMenuClickOpen = (event) => {
@@ -59,45 +62,47 @@ const Navbar = ({ authenticated, cartIcon }) => {
             />
           </Link>
         </Typography>
-        {localStorage.getItem("authenticated") === "true" ? (
-          <>
-            <Link
-              style={{ textDecoration: "none" }}
-              to={`/cart/${localStorage.getItem("userId")}`}
+        {showCart && (
+          <Link
+            style={{ textDecoration: "none" }}
+            to={`/cart/${localStorage.getItem("userId")}`}
+          >
+            <IconButton
+              aria-label="Show cart items"
+              color="inherit"
+              className={classes.cart}
             >
-              <IconButton
-                aria-label="Show cart items"
-                color="inherit"
-                className={classes.cart}
-              >
-                <Badge badgeContent={cartIcon} color="secondary">
-                  <ShoppingCart />
-                </Badge>
-              </IconButton>
-            </Link>
-            <Avatar
-              alt="Remy Sharp"
-              src={localStorage.getItem("avatar")}
-              onClick={handleMenuClickOpen}
-            />
-            <Menu
-              className={classes.menuList}
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-              <MenuItem onClick={handleMenuClose}>Orders</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
-          </>
-        ) : (
-          <Button variant="contained" onClick={handleClickLogin}>
-            Login
-          </Button>
+              <Badge badgeContent={cartIcon} color="secondary">
+                <ShoppingCart />
+              </Badge>
+            </IconButton>
+          </Link>
         )}
+
+        {location.pathname !== "/login" && (
+          <Avatar
+            alt="Remy Sharp"
+            src={localStorage.getItem("avatar")}
+            onClick={handleMenuClickOpen}
+          />
+        )}
+
+        <Menu
+          className={classes.menuList}
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Orders</MenuItem>
+          {localStorage.getItem("authenticated") === "true" ? (
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          ) : (
+            <MenuItem onClick={handleClickLogin}>Login</MenuItem>
+          )}
+        </Menu>
       </Toolbar>
     </AppBar>
   );

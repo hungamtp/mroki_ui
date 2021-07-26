@@ -63,28 +63,18 @@ export const AddForm = ({ closeAddForm }) => {
     setImage1Url("");
     setImage2Url("");
   };
-  const addProduct = () => {
-    productApi.addProduct({
-      name: name,
-      price: price,
-      retail: retail,
-      description: description,
-      saleOff: saleOff,
-      categoryId: categoryId,
-      thumbnail: thumbnailUrl,
-      image1: image1Url,
-      image2: image2Url,
-    });
+  const addProduct = (product) => {
+    productApi.addProduct(product);
   };
   useEffect(() => {
     const fetchCategory = async () => {
       const response = await categoryApi.getAllSubCategory();
-      await setCategories(response.data.data);
+      setCategories(response.data.data);
     };
     fetchCategory();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const uploadTask = storage.ref(`product-image/${name}.1`).put(thumbnail);
@@ -101,6 +91,16 @@ export const AddForm = ({ closeAddForm }) => {
             setThumbnailUrl(url);
             if (image1 === null) {
               setIsLoading(false);
+              const productTemp = {
+                name: name,
+                price: price,
+                retail: retail,
+                description: description,
+                saleOff: saleOff,
+                categoryId: categoryId,
+                thumbnail: url,
+              };
+              addProduct(productTemp);
               closeAddForm();
               resetState();
             } else {
@@ -118,8 +118,21 @@ export const AddForm = ({ closeAddForm }) => {
                     .getDownloadURL()
                     .then((url) => {
                       setImage1Url(url);
+
                       if (image2 === null) {
                         setIsLoading(false);
+                        const productTemp = {
+                          name: name,
+                          price: price,
+                          retail: retail,
+                          description: description,
+                          saleOff: saleOff,
+                          categoryId: categoryId,
+                          thumbnail: thumbnailUrl,
+                          image1: url,
+                        };
+
+                        addProduct(productTemp);
                         closeAddForm();
                         resetState();
                       } else {
@@ -138,8 +151,19 @@ export const AddForm = ({ closeAddForm }) => {
                               .then((url) => {
                                 setImage2Url(url);
                                 setIsLoading(false);
+                                const productTemp = {
+                                  name: name,
+                                  price: price,
+                                  retail: retail,
+                                  description: description,
+                                  saleOff: saleOff,
+                                  categoryId: categoryId,
+                                  thumbnail: thumbnailUrl,
+                                  image1: image1Url,
+                                  image2: url,
+                                };
+                                addProduct(productTemp);
                                 closeAddForm();
-                                resetState();
                               });
                           }
                         );
@@ -153,7 +177,7 @@ export const AddForm = ({ closeAddForm }) => {
     );
   };
   return (
-    <div className={classes.form} onSubmit={addProduct}>
+    <div className={classes.form}>
       <h2 className={classes.nameForm}>Add Product</h2>
       <form noValidate onSubmit={handleSubmit}>
         <div className={classes.subForm}>

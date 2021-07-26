@@ -54,6 +54,8 @@ export const AddForm = ({ closeAddForm }) => {
     setThumbnailUrl("");
     setPrice(0);
     setRetail(0);
+    setSaleOff(0);
+    setCategoryId("");
     setDescription("");
     setThumbnail(null);
     setImage1(null);

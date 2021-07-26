@@ -1,44 +1,64 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import useStyles from "./styles";
 import authApi from "../../axios/authApi";
 import { useHistory } from "react-router";
+import * as Yup from "yup";
+import Register from "./Register/Register";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const Login = ({ getAuthenticated }) => {
   const classes = useStyles();
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
   const [error, setError] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const history = useHistory();
+
   if (localStorage.getItem("authenticated") === "true") {
     history.push("/");
   }
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    login().then((data) => {
-      if (data.data == null) {
-        setError(true);
-      } else {
-        localStorage.setItem("username", data.data.username);
-        localStorage.setItem("avatar", data.data.avatar);
-        localStorage.setItem("userId", data.data.userId);
-        localStorage.setItem("jwtToken", data.data.jwt);
-        localStorage.setItem("role", data.data.role);
+  const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .required("Username is required")
+      .min(8, "Username must be at least 8 characters")
+      .max(16, "Username must not exceed 20 characters"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters")
+      .max(16, "Password must not exceed 40 characters"),
+  });
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+  const onSubmit = (data) => {
+    login(data).then((response) => {
+      if (response.errorCode === null) {
+        localStorage.setItem("username", response.data.username);
+        localStorage.setItem("avatar", response.data.avatar);
+        localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem("jwtToken", response.data.jwt);
+        localStorage.setItem("role", response.data.role);
         localStorage.setItem("authenticated", true);
         getAuthenticated();
         history.push("/");
+      } else {
+        setError(true);
       }
     });
   };
 
-  const login = async () => {
+  const login = async (data) => {
+    const { username, password } = data;
     const response = await authApi.login({
       username: username,
       password: password,
@@ -48,59 +68,67 @@ const Login = ({ getAuthenticated }) => {
   };
 
   return (
-    <>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Typography variant="h5">Log in</Typography>
-          {error && <div>Wrong usename or password</div>}
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
-            <TextField
-              variant="outlined"
-              margin="dense"
-              required
-              fullWidth
-              autoComplete="off"
-              label="username"
-              name="username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
-              variant="outlined"
-              margin="dense"
-              required
-              fullWidth
-              name="password"
-              label="password"
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <div className={classes.buttonContainer}>
-              <Button
-                type="submit"
-                variant="contained"
-                className={classes.submit}
-              >
-                Log in
-              </Button>
+    <Container className={classes.container} maxWidth="lg">
+      <Grid container justify="center" spacing={4}>
+        <Grid item xs={0} sm={8} md={8}></Grid>
+        <Grid item xs={12} sm={4} md={4}>
+          {!isSignUp ? (
+            <div className={classes.formLogin}>
+              {error && <div>Wrong username or password</div>}
+              <TextField
+                required
+                id="username"
+                name="username"
+                label="Username"
+                fullWidth
+                margin="dense"
+                {...register("username")}
+                error={errors.username ? true : false}
+              />
+              <Typography variant="inherit" color="textSecondary">
+                {errors.username?.message}
+              </Typography>
+              <TextField
+                required
+                id="password"
+                name="password"
+                label="Password"
+                type="password"
+                fullWidth
+                margin="dense"
+                {...register("password")}
+                error={errors.password ? true : false}
+              />
+              <Typography variant="inherit" color="textSecondary">
+                {errors.password?.message}
+              </Typography>
+              <div className={classes.button}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  Login
+                </Button>
+              </div>
+              <hr />
+              <div className={classes.registerButton}>
+                <Button
+                  variant="contained"
+                  color="palette"
+                  onClick={console.log(true)}
+                >
+                  Register
+                </Button>
+              </div>
             </div>
-
-            <Grid container className={classes.bottomForm}>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </form>
-        </div>
-      </Container>
-    </>
+          ) : (
+            <Register />
+          )}
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

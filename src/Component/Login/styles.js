@@ -4,10 +4,13 @@ export default makeStyles((theme) => ({
   container: {
     marginTop: 150,
   },
+  error: {
+    color: "#f5426c",
+  },
   formLogin: {
     display: "block",
   },
-  button: {
+  buttonLogin: {
     marginTop: 30,
     marginBottom: 30,
     display: "flex",

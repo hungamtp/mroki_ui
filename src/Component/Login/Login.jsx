@@ -21,6 +21,12 @@ const Login = ({ getAuthenticated }) => {
   if (localStorage.getItem("authenticated") === "true") {
     history.push("/");
   }
+  const handleRegister = () => {
+    setIsSignUp(true);
+  };
+  const setIsLogin = () => {
+    setIsSignUp(false);
+  };
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -102,7 +108,7 @@ const Login = ({ getAuthenticated }) => {
               <Typography variant="inherit" color="textSecondary">
                 {errors.password?.message}
               </Typography>
-              <div className={classes.button}>
+              <div className={classes.buttonLogin}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -117,14 +123,14 @@ const Login = ({ getAuthenticated }) => {
                 <Button
                   variant="contained"
                   color="palette"
-                  onClick={console.log(true)}
+                  onClick={handleRegister}
                 >
                   Register
                 </Button>
               </div>
             </div>
           ) : (
-            <Register />
+            <Register setIsLogin={setIsLogin} />
           )}
         </Grid>
       </Grid>

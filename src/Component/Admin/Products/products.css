@@ -9,7 +9,7 @@ img {
   position: relative;
 }
 #table-scroll {
-  height: 800px;
+  height: 700px;
   overflow: auto;
   margin-top: 20px;
 }

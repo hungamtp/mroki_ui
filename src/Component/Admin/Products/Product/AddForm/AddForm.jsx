@@ -184,6 +184,7 @@ export const AddForm = ({ closeAddForm }) => {
           <TextField
             variant="outlined"
             margin="dense"
+            className={classes.subForm}
             name="name"
             required
             label="Name"
@@ -204,6 +205,7 @@ export const AddForm = ({ closeAddForm }) => {
         <div>
           <TextField
             variant="outlined"
+            className={classes.subForm}
             margin="dense"
             required
             name="price"
@@ -226,6 +228,7 @@ export const AddForm = ({ closeAddForm }) => {
         <div className={classes.saleOff}>
           <TextField
             variant="outlined"
+            className={classes.subForm}
             margin="dense"
             required
             name="saleOff"

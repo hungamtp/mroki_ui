@@ -9,13 +9,22 @@ import {
 import useStyles from "./styles";
 export const UpdateForm = ({ productUpdate }) => {
   const classes = useStyles();
-  const [product, setProduct] = useState(productUpdate);
-  const [category, setCategory] = useState("Gym");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
+  const [retail, setRetail] = useState(0);
+  const [saleOff, setSaleOff] = useState(0);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [image1Url, setImage1Url] = useState("");
+  const [image2Url, setImage2Url] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (event) => {
-    setCategory(event.target.value);
-  };
-  console.log(productUpdate);
+  const handleChange = (event) => {};
 
   const handleSubmit = () => {};
   return (
@@ -29,7 +38,7 @@ export const UpdateForm = ({ productUpdate }) => {
             name="name"
             label="Name"
             type="text"
-            value={productUpdate.name}
+            onChange={(e) => setName(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -55,19 +64,20 @@ export const UpdateForm = ({ productUpdate }) => {
             name="retail"
             label="Retail"
             type="number"
+            value={productUpdate.retail}
           />
         </div>
 
         <div className={classes.imagePick}>
-          <img className={classes.productImg} src={product.thumbnail} />
+          <img className={classes.productImg} src={productUpdate.thumbnail} />
           <input type="file" className={classes.imageInput} />
         </div>
         <div className={classes.imagePick}>
-          <img className={classes.productImg} src={product.image1} />
+          <img className={classes.productImg} src={productUpdate.image1} />
           <input type="file" className={classes.imageInput} />
         </div>
         <div className={classes.imagePick}>
-          <img className={classes.productImg} src={product.image2} />
+          <img className={classes.productImg} src={productUpdate.image2} />
           <input type="file" className={classes.imageInput} />
         </div>
 

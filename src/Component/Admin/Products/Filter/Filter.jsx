@@ -58,15 +58,17 @@ export const Filter = ({
   }, []);
   return (
     <Card className={classes.filterContainer}>
-      <form>
-        <TextField
-          id="standard-basic"
-          placeholder="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <SearchIcon onClick={() => getName(search)} cursor />
-      </form>
+      <TextField
+        id="standard-basic"
+        placeholder="Search"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      <Button>
+        {" "}
+        <SearchIcon onClick={() => getName(search)} />
+      </Button>
+
       <FormControl component="fieldset" className={classes.sortForm}>
         <FormLabel component="legend">Sort by</FormLabel>
         <RadioGroup

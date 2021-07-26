@@ -6,6 +6,9 @@ export default makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
+  subForm: {
+    marginRight: 10,
+  },
 
   form: {
     padding: 20,
@@ -27,7 +30,7 @@ export default makeStyles((theme) => ({
   },
 
   selectCategory: {
-    minWidth: 120,
+    minWidth: 230,
   },
 
   saleOff: {

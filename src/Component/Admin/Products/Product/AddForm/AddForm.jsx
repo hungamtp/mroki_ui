@@ -29,9 +29,7 @@ export const AddForm = ({ closeAddForm }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const classes = useStyles();
-  const close = () => {
-    // closeAddForm(true);
-  };
+
   const handleChange = (event) => {
     setCategoryId(event.target.value);
   };
@@ -49,6 +47,19 @@ export const AddForm = ({ closeAddForm }) => {
     if (e.target.files[0]) {
       setImage2(e.target.files[0]);
     }
+  };
+  const resetState = () => {
+    setName("");
+    setCategoryId("");
+    setThumbnailUrl("");
+    setPrice(0);
+    setRetail(0);
+    setDescription("");
+    setThumbnail(null);
+    setImage1(null);
+    setImage2(null);
+    setImage1Url("");
+    setImage2Url("");
   };
   const addProduct = () => {
     productApi.addProduct({
@@ -77,11 +88,7 @@ export const AddForm = ({ closeAddForm }) => {
     const uploadTask = storage.ref(`product-image/${name}.1`).put(thumbnail);
     uploadTask.on(
       "state_changed",
-      (snapshot) => {
-        var percentage =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(percentage);
-      },
+      (snapshot) => {},
       (error) => {},
       () => {
         storage
@@ -91,20 +98,16 @@ export const AddForm = ({ closeAddForm }) => {
           .then((url) => {
             setThumbnailUrl(url);
             if (image1 === null) {
-              addProduct();
               setIsLoading(false);
-              close();
+              closeAddForm();
+              resetState();
             } else {
               const uploadTask = storage
                 .ref(`product-image/${name}.2`)
                 .put(image1);
               uploadTask.on(
                 "state_changed",
-                (snapshot) => {
-                  var percentage =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.log(percentage);
-                },
+                (snapshot) => {},
                 (error) => {},
                 () => {
                   storage
@@ -114,22 +117,16 @@ export const AddForm = ({ closeAddForm }) => {
                     .then((url) => {
                       setImage1Url(url);
                       if (image2 === null) {
-                        addProduct();
                         setIsLoading(false);
-                        close();
+                        closeAddForm();
+                        resetState();
                       } else {
                         const uploadTask = storage
                           .ref(`product-image/${name}.3`)
                           .put(image2);
                         uploadTask.on(
                           "state_changed",
-                          (snapshot) => {
-                            var percentage =
-                              (snapshot.bytesTransferred /
-                                snapshot.totalBytes) *
-                              100;
-                            console.log(percentage);
-                          },
+                          (snapshot) => {},
                           (error) => {},
                           () => {
                             storage
@@ -138,9 +135,9 @@ export const AddForm = ({ closeAddForm }) => {
                               .getDownloadURL()
                               .then((url) => {
                                 setImage2Url(url);
-                                addProduct();
                                 setIsLoading(false);
-                                close();
+                                closeAddForm();
+                                resetState();
                               });
                           }
                         );

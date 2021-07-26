@@ -23,7 +23,7 @@ import {
 } from "@material-ui/core";
 import { AddShoppingCart } from "@material-ui/icons";
 
-const ProductDetail = () => {
+const ProductDetail = ({ addToCart }) => {
   let { id } = useParams();
 
   const [product, setProduct] = useState({});
@@ -37,6 +37,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (localStorage.getItem("authenticated") === "true") {
+      addToCart();
       cartApi.addToCart(localStorage.getItem("userId"), {
         id: id,
         quantity: 1,
@@ -132,9 +133,9 @@ const ProductDetail = () => {
             <h3>Feedback</h3>
             <Card className={classes.rateContainer}>
               <div className={classes.rateCard}>
-                <h1>{rate.rate}</h1>
+                <h1>{parseFloat(rate.rate).toFixed(1)}</h1>
                 <div>
-                  <Rating value={rate.rate} readOnly />
+                  <Rating value={parseInt(rate.rate)} readOnly />
                   <div>{rate.count} Feedbacks</div>
                 </div>
               </div>

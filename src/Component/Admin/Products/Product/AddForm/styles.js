@@ -33,4 +33,7 @@ export default makeStyles((theme) => ({
   saleOff: {
     display: "flex",
   },
+  submit: {
+    marginTop: 10,
+  },
 }));

@@ -13,12 +13,8 @@ import {
   Dialog,
   Slide,
   DialogTitle,
-  Select,
-  FormControl,
-  InputLabel,
 } from "@material-ui/core";
 import Paginations from "../../Pagination/Pagination";
-import categoryApi from "../../../axios/categoryApi";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -38,7 +34,6 @@ export const Products = () => {
   const [nameSearch, setNameSearch] = useState("");
   const [categorySearch, setCategorySearch] = useState("");
   const [priceSearch, setPriceSearch] = useState([30, 200]);
-  const [categories, setCategories] = useState([]);
 
   const classes = useStyles();
 
@@ -124,7 +119,7 @@ export const Products = () => {
   };
 
   const deleteProduct = async () => {
-    const response = productApi.deleteProduct(productDelete.id);
+    productApi.deleteProduct(productDelete.id);
     handleCloseDeleteForm();
     const newProducts = products.filter(
       (product) => product.id !== productDelete.id
@@ -140,13 +135,6 @@ export const Products = () => {
     });
   }, [currentPage, size, sort, search]);
 
-  useEffect(() => {
-    const fetchAllSubCategory = async () => {
-      const response = await categoryApi.getAllSubCategory();
-      setCategories(response.data.data);
-    };
-    fetchAllSubCategory();
-  }, []);
   return (
     <div>
       <Container maxWidth="lg" class="big">
@@ -257,7 +245,7 @@ export const Products = () => {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
-        <AddForm />
+        <AddForm closeAddForm={closeAddForm} />
         <Button onClick={handleCloseAddForm} color="primary">
           Cancel
         </Button>

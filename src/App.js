@@ -9,6 +9,7 @@ import ProductDetail from "./Component/ProductDetail/ProductDetail";
 import Paginations from "./Component/Pagination/Pagination";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./Component/Login/Login";
+import cartApi from "./axios/cartApi";
 import { Admin } from "./Component/Admin/Admin";
 import { Filter } from "./Component/Filter/Filter";
 
@@ -21,15 +22,33 @@ function App() {
   const [categorySearch, setCategorySearch] = useState("");
   const [priceSearch, setPriceSearch] = useState([30, 200]);
   const [search, setSearch] = useState("");
-  const [size, setSize] = useState(9);
+  const size = 9;
   const [sort, setSort] = useState("id");
+  const [authenticated, setAuthenticated] = useState(false);
+  const [cartIcon, setCartIcon] = useState(0);
 
+  const addToCart = () => {
+    setCartIcon(cartIcon + 1);
+  };
+  const fetchCartIcon = async () => {
+    const response = cartApi.getCartIcon(localStorage.getItem("userId"));
+    return (await response).data;
+  };
+  useEffect(() => {
+    fetchCartIcon().then((count) => {
+      setCartIcon(count.data);
+    });
+    fetchCartIcon();
+  }, []);
   const getCurrentPage = (page) => {
     setCurrentPage(page);
   };
 
+  const getAuthenticated = () => {
+    setAuthenticated(true);
+  };
+
   const getName = (name) => {
-    console.log(name);
     setNameSearch(name);
     setSearch(
       `,name:${name},categoryId:${categorySearch},price${priceSearch[0]}:${priceSearch[1]}`
@@ -37,14 +56,12 @@ function App() {
   };
 
   const getPrice = (price) => {
-    console.log(price);
     setPriceSearch(price);
     setSearch(
       `,name:${nameSearch},categoryId:${categorySearch},price${price[0]}:${price[1]}`
     );
   };
   const getCategory = (category) => {
-    console.log(category);
     if (category === "All Category") {
       setCategorySearch("");
     } else {
@@ -73,9 +90,10 @@ function App() {
   return (
     <Router>
       <Container maxWidth="lg" class="mainGrid">
+        <Navbar authenticated={authenticated} cartIcon={cartIcon} />
         <Grid Container justify="center" spacing={4} class="main">
           <Route exact path="/">
-            <Grid item xs={0} sm={2} md={2}>
+            <Grid item xs={0} sm={2} md={2} class="filter-container">
               <Filter
                 getName={getName}
                 getPrice={getPrice}
@@ -84,7 +102,6 @@ function App() {
             </Grid>
             <Grid item xs={12} sm={8} md={8}>
               <Products products={products} isLoading={isLoading} />
-
               <Paginations
                 totalPages={totalPages}
                 setCurrentPage={getCurrentPage}
@@ -92,16 +109,19 @@ function App() {
             </Grid>
           </Route>
         </Grid>
-        <Navbar />
+
         <Switch>
           <Route exact path="/product/:id">
-            <ProductDetail />
+            <ProductDetail addToCart={addToCart} />
+          </Route>
+          <Route exact path="/cart/:userId">
+            <Cart />
           </Route>
           <Route exact path="/admin">
             <Admin />
           </Route>
           <Route exact path="/login">
-            <Login />
+            <Login getAuthenticated={getAuthenticated} />
           </Route>
           <Route exact path="/cart">
             <Cart />

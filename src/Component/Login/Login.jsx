@@ -10,7 +10,7 @@ import useStyles from "./styles";
 import authApi from "../../axios/authApi";
 import { useHistory } from "react-router";
 
-const Login = () => {
+const Login = ({ getAuthenticated }) => {
   const classes = useStyles();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -32,6 +32,7 @@ const Login = () => {
         localStorage.setItem("jwtToken", data.data.jwt);
         localStorage.setItem("role", data.data.role);
         localStorage.setItem("authenticated", true);
+        getAuthenticated();
         history.push("/");
       }
     });

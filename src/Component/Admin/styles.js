@@ -12,4 +12,8 @@ export default makeStyles((theme) => ({
     maxWidth: "100%",
     marginTop: 70,
   },
+  tab: {
+    display: "flex",
+    justifyContent: "space-around",
+  },
 }));

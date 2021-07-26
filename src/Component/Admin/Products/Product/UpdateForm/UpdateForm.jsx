@@ -15,6 +15,7 @@ export const UpdateForm = ({ productUpdate }) => {
   const handleChange = (event) => {
     setCategory(event.target.value);
   };
+  console.log(productUpdate);
 
   const handleSubmit = () => {};
   return (

@@ -1,5 +1,5 @@
 import { useHistory } from "react-router";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useStyles from "./styles";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
@@ -7,6 +7,7 @@ import Tab from "@material-ui/core/Tab";
 import { Products } from "./Products/Products";
 import { Categories } from "./Categories/Categories";
 import { Container } from "@material-ui/core";
+import { Customers } from "./Customers/Customers";
 
 export const Admin = () => {
   const history = useHistory();
@@ -18,7 +19,7 @@ export const Admin = () => {
 
   return (
     <Container maxWidth="lg" className={classes.root}>
-      <Paper square>
+      <Paper square className={classes.tab}>
         <Tabs
           value={value}
           indicatorColor="primary"
@@ -27,12 +28,12 @@ export const Admin = () => {
         >
           <Tab label="Product" aria-selected />
           <Tab label="Customer" />
-          <Tab label="Profit" />
           <Tab label="Category" />
         </Tabs>
       </Paper>
       {value === 0 && <Products />}
-      {value === 3 && <Categories />}
+      {value === 1 && <Customers />}
+      {value === 2 && <Categories />}
     </Container>
   );
 };

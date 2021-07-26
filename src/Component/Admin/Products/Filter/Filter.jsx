@@ -24,7 +24,6 @@ export const Filter = ({
   getName,
   getCategory,
   getPrice,
-  closeAddForm,
 }) => {
   const classes = useStyles();
 

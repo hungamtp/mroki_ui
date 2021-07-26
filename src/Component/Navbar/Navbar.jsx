@@ -6,25 +6,23 @@ import {
   Typography,
   IconButton,
   Button,
-  Slide,
   Avatar,
   Menu,
   MenuItem,
 } from "@material-ui/core";
 import { ShoppingCart } from "@material-ui/icons";
-import logo from "../../assets/logo.jpg";
 import { Link } from "react-router-dom";
+import logo from "../../assets/logo.jpg";
 import useStyles from "./styles";
 import cartApi from "../../axios/cartApi";
 import { useHistory } from "react-router";
 
-const Navbar = () => {
+const Navbar = ({ authenticated, cartIcon }) => {
   const classes = useStyles();
-  const [authenticated, setAuthenticated] = useState(false);
+
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const [cartIcon, setCartIcon] = useState(0);
-
+  const [auth, setAuth] = useState(authenticated);
   const history = useHistory();
   const handleClickLogin = () => {
     history.push("/login");
@@ -42,21 +40,11 @@ const Navbar = () => {
     localStorage.removeItem("avatar");
     localStorage.removeItem("userId");
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("role");
     localStorage.setItem("authenticated", false);
-    setAuthenticated(false);
+    setAuth(false);
     setAnchorEl(null);
   };
-
-  const fetchCartIcon = async () => {
-    const response = cartApi.getCartIcon(localStorage.getItem("userId"));
-    return (await response).data;
-  };
-
-  useEffect(() => {
-    fetchCartIcon().then((count) => {
-      setCartIcon(count.data);
-    });
-  }, [authenticated]);
 
   return (
     <AppBar className={classes.appBar}>
@@ -73,15 +61,20 @@ const Navbar = () => {
         </Typography>
         {localStorage.getItem("authenticated") === "true" ? (
           <>
-            <IconButton
-              aria-label="Show cart items"
-              color="inherit"
-              className={classes.cart}
+            <Link
+              style={{ textDecoration: "none" }}
+              to={`/cart/${localStorage.getItem("userId")}`}
             >
-              <Badge badgeContent={cartIcon} color="secondary">
-                <ShoppingCart />
-              </Badge>
-            </IconButton>
+              <IconButton
+                aria-label="Show cart items"
+                color="inherit"
+                className={classes.cart}
+              >
+                <Badge badgeContent={cartIcon} color="secondary">
+                  <ShoppingCart />
+                </Badge>
+              </IconButton>
+            </Link>
             <Avatar
               alt="Remy Sharp"
               src={localStorage.getItem("avatar")}

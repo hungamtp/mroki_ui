@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import {
-  Button,
   Card,
   Slider,
   Typography,
@@ -35,7 +34,7 @@ export const Filter = ({ getName, getPrice, getCategory }) => {
     fetchCategory();
   }, []);
   return (
-    <Card className={classes.filterContainer}>
+    <Card className={classes.filterContainer} elevation={10}>
       <form>
         <TextField
           id="standard-basic"

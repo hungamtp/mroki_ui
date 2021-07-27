@@ -9,7 +9,7 @@ import authApi from "../../axios/authApi";
 import { useHistory } from "react-router";
 import * as Yup from "yup";
 import Register from "./Register/Register";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const Login = ({ getAuthenticated }) => {

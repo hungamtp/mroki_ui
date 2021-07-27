@@ -1,20 +1,14 @@
-import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Select,
-  MenuItem,
-  InputLabel,
-} from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Button, Select, MenuItem, InputLabel } from "@material-ui/core";
+import InputField from "./InputField/InputField";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
 import useStyles from "./styles";
+import categoryApi from "../../../../../axios/categoryApi";
 export const UpdateForm = ({ productUpdate }) => {
   const classes = useStyles();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
-  const [retail, setRetail] = useState(0);
-  const [saleOff, setSaleOff] = useState(0);
-  const [thumbnail, setThumbnail] = useState(null);
+
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
@@ -26,46 +20,45 @@ export const UpdateForm = ({ productUpdate }) => {
 
   const handleChange = (event) => {};
 
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const response = await categoryApi.getAllSubCategory();
+      await setCategories(response.data.data);
+      console.log(categories);
+    };
+    fetchCategory();
+  }, []);
+
+  const schema = yup.object().shape({
+    name: yup.string().required("Enter name"),
+    description: yup.string(),
+    price: yup.number().required("Enter price").min(1),
+    retail: yup.number().required("Enter retail").min(1),
+  });
+
+  const form = useForm({
+    defaultValues: {
+      name: productUpdate.name,
+      description: productUpdate.description,
+      price: productUpdate.price,
+      retail: productUpdate.retail,
+    },
+    resolver: yupResolver(schema),
+  });
+
   const handleSubmit = () => {};
   return (
     <div className={classes.form}>
       <h2 className={classes.nameForm}>Update Product {productUpdate.name}</h2>
-      <form noValidate onSubmit={handleSubmit}>
+
+      <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
         <div>
-          <TextField
-            variant="outlined"
-            margin="dense"
-            name="name"
-            label="Name"
-            type="text"
-            onChange={(e) => setName(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="dense"
-            name="description"
-            label="Description"
-            type="text"
-          />
+          <InputField name="name" label="Name" form={form} />
+          <InputField name="description" label="Description" form={form} />
         </div>
         <div>
-          <TextField
-            variant="outlined"
-            margin="dense"
-            required
-            name="price"
-            label="Price"
-            type="number"
-          />
-          <TextField
-            variant="outlined"
-            margin="dense"
-            required
-            name="retail"
-            label="Retail"
-            type="number"
-            value={productUpdate.retail}
-          />
+          <InputField name="price" label="Price" form={form} />
+          <InputField name="retail" label="Retail" form={form} />
         </div>
 
         <div className={classes.imagePick}>
@@ -86,17 +79,18 @@ export const UpdateForm = ({ productUpdate }) => {
           <Select
             labelId="category"
             id="category"
+            value={productUpdate.categoryName}
             className={classes.selectCategory}
             onChange={handleChange}
           >
-            <MenuItem value={10}>Gym</MenuItem>
-            <MenuItem value={20}>Life Style</MenuItem>
-            <MenuItem value={30}>Running</MenuItem>
+            {categories.map((category) => {
+              <MenuItem value={category.id}>{category.name}</MenuItem>;
+            })}
           </Select>
         </div>
 
         <div className={classes.buttonContainer}>
-          <Button type="submit" variant="contained" className={classes.submit}>
+          <Button type="submit" variant="contained">
             Update
           </Button>
         </div>

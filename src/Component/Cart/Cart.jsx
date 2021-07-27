@@ -10,6 +10,12 @@ export const Cart = () => {
   const [products, setProducts] = useState([]);
   const { userId } = useParams();
 
+  const deleteProductInCart = (id, size, quantity) => {
+    const newProduct = products.filter(
+      (product) => product.id !== id && product.size !== size
+    );
+    setProducts(newProduct);
+  };
   useEffect(() => {
     const fetchProductInCart = async () => {
       const response = await cartApi.getCart(userId);
@@ -22,7 +28,12 @@ export const Cart = () => {
   return (
     <Container className={classes.container} maxWidth="md">
       {products.map((product) => {
-        return <Product product={product} />;
+        return (
+          <Product
+            product={product}
+            deleteProductInCart={deleteProductInCart}
+          />
+        );
       })}
       <div className={classes.button}>
         <Button variant="contained" color="secondary">

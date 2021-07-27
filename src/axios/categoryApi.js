@@ -6,7 +6,7 @@ const categoryApi = {
     return axiosClient.get(url);
   },
   getAllSubCategory() {
-    const url = "admin/category";
+    const url = "user/category/sub";
     return axiosClient.get(url);
   },
   getParentCategory() {

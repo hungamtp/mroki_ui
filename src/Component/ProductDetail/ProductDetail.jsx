@@ -6,13 +6,8 @@ import commentApi from "../../axios/commentApi";
 import sizeApi from "../../axios/sizeApi";
 import cartApi from "../../axios/cartApi";
 import boy from "../../assets/boy.png";
-import {
-  Grid,
-  Container,
-  Avatar,
-  Button,
-  ButtonGroup,
-} from "@material-ui/core";
+import { useHistory } from "react-router";
+import { Grid, Container, Avatar, Button, MenuItem } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 import {
   Card,
@@ -20,12 +15,13 @@ import {
   CardContent,
   Typography,
   IconButton,
+  Select,
 } from "@material-ui/core";
 import { AddShoppingCart } from "@material-ui/icons";
 
 const ProductDetail = ({ addToCart }) => {
   let { id } = useParams();
-
+  const history = useHistory();
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
   const [sizes, setSizes] = useState([]);
@@ -43,6 +39,8 @@ const ProductDetail = ({ addToCart }) => {
         quantity: 1,
         size: size,
       });
+    } else {
+      history.push("/login");
     }
   };
 
@@ -64,6 +62,10 @@ const ProductDetail = ({ addToCart }) => {
   const fetchAverageEate = async () => {
     const response = await commentApi.getEverageRate(id);
     return response.data;
+  };
+
+  const handleSizeChange = (e) => {
+    setSize(e.target.value);
   };
 
   useEffect(() => {
@@ -111,25 +113,22 @@ const ProductDetail = ({ addToCart }) => {
               </CardContent>
             </Card>
             <h3>Size</h3>
-            <ButtonGroup size="small" aria-label="small outlined button group">
-              <Card className={classes.size}>
+            <siv className={classes.sizeHolder}>
+              <Select
+                value={size}
+                onChange={handleSizeChange}
+                displayEmpty
+                className={classes.selectEmpty}
+                inputProps={{ "aria-label": "Without label" }}
+              >
                 {sizes.map((size) => {
-                  return (
-                    <Button
-                      value={size}
-                      onClick={() => {
-                        setSize(size.size);
-                      }}
-                    >
-                      {size.size}
-                    </Button>
-                  );
+                  return <MenuItem value={size.size}>{size.size}</MenuItem>;
                 })}
-              </Card>
+              </Select>
               <IconButton aria-label="Add to Cart">
                 <AddShoppingCart onClick={handleAddToCart} />
               </IconButton>
-            </ButtonGroup>
+            </siv>
             <h3>Feedback</h3>
             <Card className={classes.rateContainer}>
               <div className={classes.rateCard}>

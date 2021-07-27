@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
   Badge,
   Typography,
   IconButton,
-  Button,
   Avatar,
   Menu,
   MenuItem,
@@ -24,7 +23,6 @@ const Navbar = ({ authenticated, cartIcon }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const [auth, setAuth] = useState(authenticated);
   const history = useHistory();
   const handleClickLogin = () => {
     handleMenuClose();
@@ -45,8 +43,10 @@ const Navbar = ({ authenticated, cartIcon }) => {
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("role");
     localStorage.setItem("authenticated", false);
-    setAuth(false);
     setAnchorEl(null);
+    if (location.pathname === "/admin") {
+      history.push("/login");
+    }
   };
 
   return (

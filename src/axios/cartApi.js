@@ -15,6 +15,11 @@ const cartApi = {
     const url = `user/cart?customerId=${userId}`;
     return axiosClient.get(url);
   },
+
+  deleteProductInCart(productId, size, userId) {
+    const url = `user/cart?productId=${productId}&size=${size}&userId=${userId}`;
+    axiosClient.delete(url);
+  },
 };
 
 export default cartApi;

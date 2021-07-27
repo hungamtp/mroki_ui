@@ -76,4 +76,8 @@ export default makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-around",
   },
+  sizeHolder: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
 }));

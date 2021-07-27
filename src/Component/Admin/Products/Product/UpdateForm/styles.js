@@ -14,6 +14,7 @@ export default makeStyles((theme) => ({
   buttonContainer: {
     display: "flex",
     justifyContent: "center",
+    marginTop: 10,
   },
   productImg: {
     height: 100,

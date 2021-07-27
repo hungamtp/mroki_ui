@@ -1,5 +1,4 @@
 import React from "react";
-import useStyles from "./styles";
 import { TableCell, TableRow } from "@material-ui/core";
 export const Customer = ({ customer }) => {
   return (

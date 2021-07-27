@@ -11,9 +11,15 @@ import { Customers } from "./Customers/Customers";
 
 export const Admin = () => {
   const history = useHistory();
-  if (localStorage.getItem("role") !== "Admin") {
-    history.push("/");
+
+  if (localStorage.getItem("authenticated") === "false") {
+    history.push("/login");
+  } else {
+    if (localStorage.getItem("role") !== "Admin") {
+      history.push("/");
+    }
   }
+
   const classes = useStyles();
   const [value, setValue] = useState(0);
 

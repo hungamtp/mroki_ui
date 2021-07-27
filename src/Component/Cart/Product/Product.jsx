@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import { Card, Checkbox, Button, CardMedia } from "@material-ui/core";
+import { Card, Button, CardMedia } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import useStyles from "./styles";
+import cartApi from "../../../axios/cartApi";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 
-const Product = ({ product }) => {
+const Product = ({ product, deleteProductInCart }) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(product.quantity);
-  const [checked, setChecked] = useState(true);
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
+  const handleDelete = () => {
+    cartApi.deleteProductInCart(
+      product.id,
+      product.size,
+      localStorage.getItem("userId")
+    );
+    deleteProductInCart(product.id, product.size, quantity);
   };
   return (
     <>
@@ -35,7 +40,7 @@ const Product = ({ product }) => {
           <button onClick={() => setQuantity(quantity + 1)}>+</button>
         </div>
         <div>{quantity * product.price} $</div>
-        <Button>
+        <Button onClick={handleDelete}>
           <DeleteOutlineIcon />
         </Button>
       </Card>

@@ -7,11 +7,20 @@ import TreeItem from "@material-ui/lab/TreeItem";
 import { Button, IconButton, Container, Grid } from "@material-ui/core";
 import { Category } from "./Category/Category";
 import categoryApi from "../../../axios/categoryApi";
+import { FormCategory } from "./FormCategory/FormCategory";
 
 export const Categories = () => {
   const classes = useStyles();
   const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState();
+  const [parentId, setParentId] = useState("");
 
+  const editCategory = (categoryEdit) => {
+    setCategory(categoryEdit);
+  };
+  const getParentId = (parent) => {
+    setParentId(parent);
+  };
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await categoryApi.getParentCategory();
@@ -23,7 +32,7 @@ export const Categories = () => {
   return (
     <Container maxWidth="lg" className={classes.container}>
       <Grid container justify="center" spacing={4} class="main">
-        <Grid item xs={12} sm={6} md={6}>
+        <Grid item xs={12} sm={9} md={9}>
           <TreeView
             className={classes.root}
             defaultCollapseIcon={<ExpandMoreIcon />}
@@ -34,14 +43,23 @@ export const Categories = () => {
               return (
                 <TreeItem nodeId={id} label={name}>
                   {subCategories.map((subCategory) => {
-                    return <Category category={subCategory} />;
+                    return (
+                      <Category
+                        parentId={id}
+                        category={subCategory}
+                        editCategory={editCategory}
+                        getParentId={getParentId}
+                      />
+                    );
                   })}
                 </TreeItem>
               );
             })}
           </TreeView>
         </Grid>
-        <Grid item xs={12} sm={6} md={6}></Grid>
+        <Grid item xs={12} sm={3} md={3}>
+          <FormCategory categories={categories} />
+        </Grid>
       </Grid>
     </Container>
   );

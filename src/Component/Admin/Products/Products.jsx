@@ -14,12 +14,14 @@ import {
   Slide,
   DialogTitle,
 } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import Paginations from "../../Pagination/Pagination";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 export const Products = () => {
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   const [openDialogAdd, setOpenDialogAdd] = useState(false);
@@ -129,9 +131,11 @@ export const Products = () => {
 
   useEffect(() => {
     fetchProducts().then((response) => {
+      setIsLoading(true);
       setProducts(response.data.data);
       setTotalPage(response.data.totalPage);
       setTotalElement(response.data.totalElement);
+      setTimeout(() => setIsLoading(false), 300);
     });
   }, [currentPage, size, sort, search]);
 

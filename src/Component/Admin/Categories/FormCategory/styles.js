@@ -8,4 +8,13 @@ export default makeStyles((theme) => ({
     flexGrow: 1,
     maxWidth: 500,
   },
+  button: {
+    display: "flex",
+    justifyContent: "space-around",
+    marginTop: 10,
+  },
+  parentCate: {
+    marginTop: 10,
+    minWidth: 200,
+  },
 }));

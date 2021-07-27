@@ -83,7 +83,7 @@ function App() {
       setIsLoading(true);
       setProducts(productsData.data);
       setTotalPage(productsData.totalPage);
-      setIsLoading(false);
+      setTimeout(() => setIsLoading(false), 200);
     });
   }, [currentPage, sort, search]);
 

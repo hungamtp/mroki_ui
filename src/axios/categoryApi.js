@@ -17,6 +17,11 @@ const categoryApi = {
     const url = "admin/category";
     return axiosClient.post(url, category);
   },
+
+  deleteCategory(id) {
+    const url = `admin/category/${id}`;
+    return axiosClient.delete(url);
+  },
 };
 
 export default categoryApi;
